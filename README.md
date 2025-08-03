@@ -1,2 +1,2 @@
 # PlaywrightHRM
-Playwright Python tests of Orange HRM Demo
+Playwright Python tests of Demoblaze product site
