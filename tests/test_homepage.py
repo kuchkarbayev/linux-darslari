@@ -2,9 +2,12 @@ from pages.homepage import Homepage
 import pytest 
 import allure 
 
+@allure.epic("Demoblaze")
+@allure.feature("Тестирование главной страницы")
+@allure.story("Сортировка товаров по категориям")
 @pytest.mark.parametrize("category, product_name, expect_result", [
-    ('Phones', 'Samsung galaxy s6', True),
-    ('Phones', 'Sony vaio i7', False),
+    ('Phones', 'Samsung galaxy s6', True), #Valid data
+    ('Phones', 'Sony vaio i7', False), #Invalid data
     ('Laptops', 'Sony vaio i5', True),
     ('Laptops', 'Nexus 6', False),
     ('Monitors', 'Apple monitor 24', True),
@@ -12,52 +15,51 @@ import allure
 ])
 def test_change_category(page, category, product_name, expect_result):
     home_page = Homepage(page)
-    home_page.navigate()
 
-    home_page.sort_by_category(category)
+    with allure.step("Нажимаем на категорию {category}"):    
+        home_page.sort_by_category(category)
 
-    page.wait_for_timeout(2000)
+    with allure.step("Проверяем, что список товаров отсортировался"):    
+        assert home_page.verify_product(product_name) == expect_result
 
-    assert home_page.verify_product(product_name) == expect_result
-
-def test_next_carousel(page):
+@allure.epic("Demoblaze")
+@allure.feature("Тестирование главной страницы")
+@allure.story("Проверка кнопки карусели Вперед")
+@pytest.mark.parametrize("direction", [
+    ('.carousel-control-next'),
+    ('.carousel-control-prev')
+])
+def test_carousel(page, direction):
     home_page = Homepage(page)
 
-    home_page.navigate()
+    with allure.step("Сохраняем alt изображения"):  
+        first_slide = page.locator(".carousel-item.active")
+        first_slide_alt = first_slide.locator("img").get_attribute("alt")
 
-    first_slide = page.locator(".carousel-item.active")
-    first_slide_alt = first_slide.locator("img").get_attribute("alt")
+    with allure.step("Нажимаем кнопку карусели Вперед"):  
+        home_page.carousel(direction)
 
-    home_page.carousel_next()
+    with allure.step("Сохраняем alt нового изображения"):  
+        second_slide = page.locator(".carousel-item.active")
+        second_slide_alt = second_slide.locator("img").get_attribute("alt")
 
-    second_slide = page.locator(".carousel-item.active")
-    second_slide_alt = second_slide.locator("img").get_attribute("alt")
+    with allure.step("Сравниваем прошлое и настоящее изображение в каруселе"):  
+        assert first_slide_alt != second_slide_alt
 
-    assert first_slide_alt != second_slide_alt
-
-def test_prev_carousel(page):
-    home_page = Homepage(page)
-
-    home_page.navigate()
-
-    first_slide = page.locator(".carousel-item.active")
-    first_slide_alt = first_slide.locator("img").get_attribute("alt")
-
-    home_page.carousel_prev()
-
-    second_slide = page.locator(".carousel-item.active")
-    second_slide_alt = second_slide.locator("img").get_attribute("alt")
-
-    assert first_slide_alt != second_slide_alt
-
+@allure.epic("Demoblaze")
+@allure.feature("Тестирование главной страницы")
+@allure.story("Проверка перехода на другую страницу карточек товаров")
 def test_next_table(page):
     home_page = Homepage(page)
-    home_page.navigate()
 
-    first_product_before = page.locator(".card-title a").first.inner_text()
+    with allure.step("Сохраняем текст первого товара"):  
+        first_product_before = page.locator(".card-title a").first.inner_text()
 
-    home_page.next_page()
-    
-    first_product_after = page.locator(".card-title a").first.inner_text()
+    with allure.step("Переходим на следующую страницу"):  
+        home_page.next_page()
 
-    assert first_product_before != first_product_after
+    with allure.step("Сохраняем текст первого товара на новой странице"):  
+        first_product_after = page.locator(".card-title a").first.inner_text()
+
+    with allure.step("Сравниваем сохраненый текст"):  
+     assert first_product_before != first_product_after

@@ -6,5 +6,6 @@ def page():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False) #temp
         page = browser.new_page()
+        page.goto("https://demoblaze.com/", wait_until='load')
         yield page
         browser.close()
