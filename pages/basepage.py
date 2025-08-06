@@ -23,6 +23,7 @@ class Basepage:
     SIGN_USER = '#sign-username'
     SIGN_PASS = '#sign-password'
     SIGN_SEND = '.modal-footer >> button:has-text("Sign up")'
+    TOTAL = '#totalp'
 
     def __init__(self, page: Page):  
         self.page = page
@@ -30,7 +31,7 @@ class Basepage:
     @allure.step("Переход в корзину")
     def go_to_cart(self):
         self.page.locator(self.CART_LINK).click()
-        self.page.locator(self.CART_ID).wait_for()
+        self.page.wait_for_selector(self.TOTAL)
         
         from pages.cartpage import Cartpage
         return Cartpage(self.page)
@@ -51,7 +52,6 @@ class Basepage:
         self.page.locator(self.CONTACT_MESSAGE).fill(data['message'])
 
         self.page.locator(self.CONTACT_SEND).click()
-        self.page.wait_for_timeout(500)
         self.page.remove_listener('dialog', alert_accept)
 
         return alert_received[0]
@@ -63,32 +63,34 @@ class Basepage:
     def _fill_and_submit(self, username: str, password: str, user_field: str, pass_field: str, submit_button: str):
         self.page.locator(user_field).fill(username)
         self.page.locator(pass_field).fill(password)
-        self.page.wait_for_timeout(1000)
         self.page.locator(submit_button).click()
 
     @allure.step("Авторизация пользователя")
     def log_in(self, data: dict):
         self._open_auth_modal(self.LOG_LINK, "Log in")
         self._fill_and_submit(
-            username=data['username'],
-            password=data['username'],
+            username=data['username'] + 'QAtest',
+            password=data['username'] + 'QAtest',
             user_field=self.LOG_USER,
             pass_field=self.LOG_PASS,
             submit_button=self.LOG_SEND)
+        self.page.locator("#logout2").wait_for(state="visible", timeout=10000)
 
     @allure.step("Регистрация пользователя")
     def sign_up(self, data: dict):
         self._open_auth_modal(self.SIGN_LINK, "Sign up")
         self._fill_and_submit(
-            username=data['username'],
-            password=data['username'],
+            username=data['username'] + 'QAtest',
+            password=data['username'] + 'QAtest',
             user_field=self.SIGN_USER,
             pass_field=self.SIGN_PASS,
             submit_button=self.SIGN_SEND)
+        self.page.locator("#signInModal").wait_for(state="hidden", timeout=10000)
         
     @allure.step("Возвращаемся на главную страницу")        
     def back_home(self):
         self.page.get_by_role('link', name = 'Home').click()
         self.page.wait_for_url("https://demoblaze.com/index.html", timeout=1000)
+        self.page.wait_for_load_state('load')
         from pages.homepage import Homepage
         return Homepage(self.page)

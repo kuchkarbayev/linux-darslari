@@ -1,1 +1,0 @@
-{'name': 'David Reyes', 'country': 'Peru', 'city': 'Cassandraborough', 'card': '4027309600381509', 'month': '08', 'year': '2025', 'email': 'jennifergreene@example.org', 'message': '🧑🏿\u200d🤝\u200d🧑🏽', 'username': 'ocarter'}

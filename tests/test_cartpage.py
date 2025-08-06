@@ -35,7 +35,6 @@ def test_check_price_cart(page):
         cart_page.delete_first_product()
 
     with allure.step("Оформление заказа"):
-        page.wait_for_timeout(2000)
         result = cart_page.send_order(fake_data)
         assert result == True
         

@@ -20,7 +20,7 @@ class Productpage(Basepage):
 
         self.page.on('dialog', accept_alert)
         self.page.locator(self.ADD_BUTTON).click()
-        self.page.wait_for_timeout(1000)
+        self.page.wait_for_timeout(500) #too fast click, sometimes product dont add to cart
         
         self.page.remove_listener('dialog', accept_alert)
         

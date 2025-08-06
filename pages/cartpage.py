@@ -1,4 +1,5 @@
 from .basepage import Basepage
+from playwright.sync_api import expect
 import allure
 
 class Cartpage(Basepage):
@@ -18,7 +19,6 @@ class Cartpage(Basepage):
 
     @allure.step("Получаем стоимость всех товаров в корзине")
     def get_total_price(self):
-        self.page.locator(self.PRICES).first.wait_for()
         prices = []
         price_elements = self.page.locator(self.PRICES).all()
 
@@ -31,7 +31,14 @@ class Cartpage(Basepage):
     @allure.step("Удаляем первый товар в корзине")
     def delete_first_product(self):
         self.page.locator(self.DELETE).first.wait_for()
-        self.page.locator(self.DELETE).click()
+        
+        with self.page.expect_response(lambda response: '/deleteitem' in response.url and response.status == 200):
+            with self.page.expect_navigation():
+                self.page.locator(self.DELETE).first.click()
+        
+        self.page.wait_for_load_state("load")
+    
+        expect(self.page.locator("body")).to_be_visible()
 
     @allure.step("Заполняем форму оформления заказа")
     def send_order(self, data: dict):
@@ -47,11 +54,10 @@ class Cartpage(Basepage):
             self.page.locator(self.YEAR).fill(data['year'])
             
             self.page.locator(self.PURCHASE).click()
-            
-            ok_button = self.page.locator(self.CONFIRM_BUTTON)
-            ok_button.wait_for(state="visible", timeout=5000)
-            self.page.wait_for_timeout(1000)
-            ok_button.click()
+
+            self.page.wait_for_selector(self.CONFIRM_BUTTON, state = 'visible')
+            self.page.wait_for_timeout(500) #without this -> no redirect to homepage, idk why
+            self.page.locator(self.CONFIRM_BUTTON).click()
             
             self.page.wait_for_url("**/index.html", timeout=10000)
     
@@ -59,7 +65,6 @@ class Cartpage(Basepage):
             
         except Exception as e:
             print(f"Error during send_order: {e}")
-            self.page.screenshot(path="debug_send_order_error.png")
             return False
 
 

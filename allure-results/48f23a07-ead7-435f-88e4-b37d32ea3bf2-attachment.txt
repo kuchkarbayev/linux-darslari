@@ -1,1 +1,0 @@
-{'name': 'Kara Blevins', 'country': 'Brazil', 'city': 'New Lindseyshire', 'card': '4763718079990509', 'month': '09', 'year': '2025', 'email': 'garzatracy@example.net', 'message': '😯', 'username': 'davidbullock'}

@@ -56,7 +56,7 @@ def test_next_table(page):
         first_product_before = page.locator(".card-title a").first.inner_text()
 
     with allure.step("Переходим на следующую страницу"):  
-        home_page.next_page()
+        home_page.table_page('#next2')
 
     with allure.step("Сохраняем текст первого товара на новой странице"):  
         first_product_after = page.locator(".card-title a").first.inner_text()
