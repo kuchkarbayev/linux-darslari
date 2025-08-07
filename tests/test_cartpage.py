@@ -28,6 +28,7 @@ def test_check_price_cart(page):
         product_page.go_to_cart()
 
     with allure.step("Проверяем цену с итоговой"):
+        page.wait_for_function("document.querySelector('#totalp').textContent.trim() !== ''", timeout=10000)
         total = cart_page.get_total_price()
         assert total == float(page.locator("#totalp").inner_text())
 

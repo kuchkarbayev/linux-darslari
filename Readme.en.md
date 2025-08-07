@@ -70,11 +70,12 @@ allure serve allure-results
 ## Test Cases
 Testing Type | Example Scenarios | Count
 |--|--|--|
-End2End | Registration → Product Selection → Payment | 3+
-Home page | Categories, carousel, pagination |	8
-Product page | Data validation, add to cart | 8
-Cart page| Total calculation, item removal, checkout | 5
-Users | Registration, login, feedback | 2
+End2End | Registration → Product Selection → Payment | 1+
+Home page | Categories, carousel, pagination |	3+
+Product page | Data validation, add to cart | 2+
+Cart page| Total calculation, item removal, checkout | 1+
+Users | Registration, login, feedback | 2+
+Invalid | Registration, login, feedback, Payment | 4+
 
 ## Technical Challenges Solved
 
