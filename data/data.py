@@ -12,5 +12,5 @@ def generate_fake_data():
         "year": fake.credit_card_expire(start="now", end="+10y", date_format="%Y"),
         "email": fake.email(),
         "message": fake.emoji(),
-        "username": fake.user_name()
+        "username": fake.user_name() + 'QAtest'
     }

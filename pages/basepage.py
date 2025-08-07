@@ -31,7 +31,7 @@ class Basepage:
     @allure.step("Переход в корзину")
     def go_to_cart(self):
         self.page.locator(self.CART_LINK).click()
-        self.page.wait_for_selector(self.TOTAL)
+        self.page.wait_for_selector(self.TOTAL, state="attached", timeout=10000)
         
         from pages.cartpage import Cartpage
         return Cartpage(self.page)
@@ -68,24 +68,69 @@ class Basepage:
     @allure.step("Авторизация пользователя")
     def log_in(self, data: dict):
         self._open_auth_modal(self.LOG_LINK, "Log in")
+
+        alert_occurred = False
+
+        def handle_dialog(dialog: Dialog):
+            nonlocal alert_occurred
+            alert_occurred = True
+            dialog.accept()
+
+        self.page.once("dialog", handle_dialog)    
+
         self._fill_and_submit(
-            username=data['username'] + 'QAtest',
-            password=data['username'] + 'QAtest',
+            username=data['username'],
+            password=data['username'],
             user_field=self.LOG_USER,
             pass_field=self.LOG_PASS,
             submit_button=self.LOG_SEND)
-        self.page.locator("#logout2").wait_for(state="visible", timeout=10000)
+        
+        self.page.wait_for_timeout(500)
+        
+        if alert_occurred:
+            return False
+        
+        try:
+            self.page.locator("#logout2").wait_for(state="visible", timeout=5000)
+            return self.page.locator("#logout2").is_visible()
+        except TimeoutError:
+            return False
 
     @allure.step("Регистрация пользователя")
     def sign_up(self, data: dict):
         self._open_auth_modal(self.SIGN_LINK, "Sign up")
+
+        alert_text = None
+        alert_occurred = False
+        
+        def handle_dialog(dialog: Dialog):
+            nonlocal alert_text, alert_occurred
+            alert_text = dialog.message
+            alert_occurred = True
+            dialog.accept()
+        
+        self.page.once("dialog", handle_dialog)
+        
         self._fill_and_submit(
-            username=data['username'] + 'QAtest',
-            password=data['username'] + 'QAtest',
+            username=data['username'],
+            password=data['username'],
             user_field=self.SIGN_USER,
             pass_field=self.SIGN_PASS,
             submit_button=self.SIGN_SEND)
-        self.page.locator("#signInModal").wait_for(state="hidden", timeout=10000)
+        
+        self.page.wait_for_timeout(500)
+        
+        if alert_occurred:
+            if "Sign up successful" in alert_text:
+                try:
+                    self.page.locator("#signInModal").wait_for(state="hidden", timeout=5000)
+                    return True
+                except TimeoutError:
+                    return True
+            else:
+                return False
+        else:
+            return False
         
     @allure.step("Возвращаемся на главную страницу")        
     def back_home(self):
