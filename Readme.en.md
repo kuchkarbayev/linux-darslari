@@ -64,7 +64,7 @@ pytest tests/test_e2e.py -v
 allure serve allure-results
 ```
 
-## Allure-отчеты
+## Allure-reports
 [Latest Allure Report](https://ewerall.github.io/PlaywrightDemoblaze/#suites/ac0d5a5ca3595f3896d8c76597ca74f3/3c820b7c61d675ab/ "Allure") from Github actions
 
 ## Test Cases
