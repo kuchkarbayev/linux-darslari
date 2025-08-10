@@ -1,6 +1,6 @@
 # Playwright Automation Testing for Demoblaze
 
-[![EN](https://img.shields.io/badge/EN-english-CC0000?logo=unitedkingdom&logoColor=white)](https://github.com/Ewerall/PlaywrightDemoblaze/blob/main/Readme.en.md)
+[![EN](https://img.shields.io/badge/EN-english-CC0000?logo=unitedkingdom&logoColor=white)](https://github.com/Ewerall/PlaywrightDemoblaze/blob/main/Readme.md)
 
 [![Playwright](https://img.shields.io/badge/Playwright-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
 [![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)](https://www.python.org/)
