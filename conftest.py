@@ -2,6 +2,7 @@ import pytest
 import allure
 from playwright.sync_api import sync_playwright, expect
 
+
 @pytest.fixture
 def page():
     with sync_playwright() as p:

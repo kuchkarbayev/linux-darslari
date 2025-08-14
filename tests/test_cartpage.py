@@ -1,9 +1,10 @@
+import pytest
+import allure
+
 from pages.homepage import Homepage
 from pages.productpage import Productpage
 from pages.cartpage import Cartpage
 from data.data import generate_fake_data
-import pytest 
-import allure 
 
 @allure.epic("Demoblaze")
 @allure.feature("Тестирование корзины")
@@ -17,7 +18,7 @@ def test_check_price_cart(page):
 
     with allure.step("Переходим на карточку товара"):
         home_page.go_to_product("Samsung galaxy s6")
-        
+
     with allure.step("Добавляем в корзину"):
         product_page.add_to_cart()
 
@@ -37,7 +38,4 @@ def test_check_price_cart(page):
 
     with allure.step("Оформление заказа"):
         result = cart_page.send_order(fake_data)
-        assert result == True
-        
-
-
+        assert result is True

@@ -1,8 +1,9 @@
-from faker import Faker    
+from faker import Faker
+
 
 def generate_fake_data():
     fake = Faker()
-        
+
     return {
         "name": fake.name(),
         "country": fake.country(),

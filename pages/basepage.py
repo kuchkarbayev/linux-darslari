@@ -1,6 +1,8 @@
-from playwright.sync_api import Page, Dialog
 from typing import TYPE_CHECKING
+
 import allure
+
+from playwright.sync_api import Page, Dialog
 
 if TYPE_CHECKING:
     from pages.cartpage import Cartpage
@@ -25,20 +27,20 @@ class Basepage:
     SIGN_SEND = '.modal-footer >> button:has-text("Sign up")'
     TOTAL = '#totalp'
 
-    def __init__(self, page: Page):  
+    def __init__(self, page: Page):
         self.page = page
 
     @allure.step("Переход в корзину")
     def go_to_cart(self):
         self.page.locator(self.CART_LINK).click()
         self.page.wait_for_selector(self.TOTAL, state="attached", timeout=10000)
-        
+
         from pages.cartpage import Cartpage
         return Cartpage(self.page)
-    
+
     def contact_window(self, data: dict):
-        alert_received = [False] 
-        
+        alert_received = [False]
+
         def alert_accept(alert: Dialog):
             alert_received[0] = True
             alert.accept()
@@ -55,12 +57,13 @@ class Basepage:
         self.page.remove_listener('dialog', alert_accept)
 
         return alert_received[0]
-    
+
     def _open_auth_modal(self, link_selector: str, modal_title: str):
         self.page.locator(link_selector).click()
         self.page.locator(self.WINDOW, has_text=modal_title).wait_for(state="visible", timeout=2000)
 
-    def _fill_and_submit(self, username: str, password: str, user_field: str, pass_field: str, submit_button: str):
+    def _fill_and_submit(self, username: str, password: str, user_field: str,
+                         pass_field: str, submit_button: str):
         self.page.locator(user_field).fill(username)
         self.page.locator(pass_field).fill(password)
         self.page.locator(submit_button).click()
@@ -76,7 +79,7 @@ class Basepage:
             alert_occurred = True
             dialog.accept()
 
-        self.page.once("dialog", handle_dialog)    
+        self.page.once("dialog", handle_dialog)
 
         self._fill_and_submit(
             username=data['username'],
@@ -84,12 +87,12 @@ class Basepage:
             user_field=self.LOG_USER,
             pass_field=self.LOG_PASS,
             submit_button=self.LOG_SEND)
-        
+
         self.page.wait_for_timeout(500)
-        
+
         if alert_occurred:
             return False
-        
+
         try:
             self.page.locator("#logout2").wait_for(state="visible", timeout=5000)
             return self.page.locator("#logout2").is_visible()
@@ -102,24 +105,24 @@ class Basepage:
 
         alert_text = None
         alert_occurred = False
-        
+
         def handle_dialog(dialog: Dialog):
             nonlocal alert_text, alert_occurred
             alert_text = dialog.message
             alert_occurred = True
             dialog.accept()
-        
+
         self.page.once("dialog", handle_dialog)
-        
+
         self._fill_and_submit(
             username=data['username'],
             password=data['username'],
             user_field=self.SIGN_USER,
             pass_field=self.SIGN_PASS,
             submit_button=self.SIGN_SEND)
-        
+
         self.page.wait_for_timeout(500)
-        
+
         if alert_occurred:
             if "Sign up successful" in alert_text:
                 try:
@@ -131,8 +134,8 @@ class Basepage:
                 return False
         else:
             return False
-        
-    @allure.step("Возвращаемся на главную страницу")        
+
+    @allure.step("Возвращаемся на главную страницу")
     def back_home(self):
         self.page.get_by_role('link', name = 'Home').click()
         self.page.wait_for_url("https://demoblaze.com/index.html", timeout=1000)

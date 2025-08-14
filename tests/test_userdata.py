@@ -1,7 +1,9 @@
+import pytest  # noqa: F401
+import allure
+
 from pages.homepage import Homepage
 from data.data import generate_fake_data
-import pytest 
-import allure 
+
 
 @allure.epic("Demoblaze")
 @allure.feature("Тестирование регистрации и авторизации")
@@ -12,13 +14,14 @@ def test_log_sign(page):
 
     with allure.step("Регистрируем аккаунт"):
         home_page.sign_up(fake_data)
-    
+
     with allure.step("Вход в аккаунт"):
         home_page.log_in(fake_data)
 
     with allure.step("Проверяем вход в аккаунт"):
-        result = page.get_by_role('link', name = 'Log out').count()
+        result = page.get_by_role('link', name='Log out').count()
         assert result > 0
+
 
 @allure.epic("Demoblaze")
 @allure.feature("Тестирование feedback")
@@ -29,5 +32,4 @@ def test_feedback(page):
 
     with allure.step("Заполняем форму и отправляем"):
         result = home_page.contact_window(fake_data)
-        assert result == True
-    
+        assert result is True

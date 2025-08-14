@@ -1,7 +1,9 @@
+import pytest
+import allure
+
 from pages.homepage import Homepage
 from pages.productpage import Productpage
-import pytest 
-import allure 
+
 
 @allure.epic("Demoblaze")
 @allure.feature("Тестирование страницы продукта")
@@ -16,14 +18,15 @@ def test_product_name(page, product_name):
     home_page = Homepage(page)
     product_page = Productpage(page)
 
-    with allure.step("Переходим на страницу {product_name}"):    
+    with allure.step("Переходим на страницу {product_name}"):
         home_page.go_to_product(product_name)
 
-    with allure.step("Сохраняем название товара со страницы"):    
+    with allure.step("Сохраняем название товара со страницы"):
         name = product_page.get_product_name()
 
-    with allure.step("Сравниваем заданное и указанное название"):    
+    with allure.step("Сравниваем заданное и указанное название"):
         assert name == product_name
+
 
 @allure.epic("Demoblaze")
 @allure.feature("Тестирование страницы продукта")
@@ -38,11 +41,11 @@ def test_add_cart(page, product_name):
     home_page = Homepage(page)
     product_page = Productpage(page)
 
-    with allure.step("Переходим на страницу {product_name}"):    
+    with allure.step("Переходим на страницу {product_name}"):
         home_page.go_to_product(product_name)
 
-    with allure.step("Нажимаем кнопку Add to cart"):    
+    with allure.step("Нажимаем кнопку Add to cart"):
         result = product_page.add_to_cart()
 
-    with allure.step("Получаем ответ"):    
-        assert result == True
+    with allure.step("Получаем ответ"):
+        assert result is True

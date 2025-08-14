@@ -1,16 +1,18 @@
+import pytest
+import allure
+
 from pages.homepage import Homepage
 from pages.productpage import Productpage
 from pages.cartpage import Cartpage
 from data.data import generate_fake_data
-import pytest 
-import allure 
+
 
 @allure.epic("Demoblaze")
 @allure.feature("E2E тестирование")
 @allure.story("Тестирование по пользовательскому сценарию #1")
 @pytest.mark.parametrize("product_name1, product_name2", [
-    ('Apple monitor 24', 'Nokia lumia 1520'), 
-    ('MacBook air', 'Iphone 6 32gb'), 
+    ('Apple monitor 24', 'Nokia lumia 1520'),
+    ('MacBook air', 'Iphone 6 32gb'),
     ('Dell i7 8gb', 'Sony vaio i5'),
 ])
 def test_e2e_one(page, product_name1, product_name2):
@@ -21,7 +23,7 @@ def test_e2e_one(page, product_name1, product_name2):
 
     with allure.step("Регистрируем аккаунт"):
         home_page.sign_up(fake_data)
-    
+
     with allure.step("Вход в аккаунт"):
         home_page.log_in(fake_data)
 
@@ -38,7 +40,7 @@ def test_e2e_one(page, product_name1, product_name2):
         product_page.back_home()
 
     with allure.step("Переходим на карточку товара {product_name2}"):
-        home_page.go_to_product(product_name2)        
+        home_page.go_to_product(product_name2)
 
     with allure.step("Добавляем {product_name2} в корзину"):
         product_page.add_to_cart()
@@ -51,5 +53,4 @@ def test_e2e_one(page, product_name1, product_name2):
 
     with allure.step("Заполняем форму и отправляем"):
         result = home_page.contact_window(fake_data)
-        assert result == True
-    
+        assert result is True
