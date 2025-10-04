@@ -1,0 +1,3 @@
+Bu birinchi qator
+Bu ikkinchi qator
+Bu error log bor qator
