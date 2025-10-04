@@ -37,4 +37,4 @@ Fikr va takliflaringizni qoldirishingiz mumkin.
 
 ✍️ Kurs muallifi: Bobur Meliev
 Batafsil: https://sifat.pro
-📂 Ushbu repo: mening shaxsiy uyga vazifalarim to‘plami.
+:📂 Ushbu repo: mening shaxsiy uyga vazifalarim to‘plami.
