@@ -36,4 +36,5 @@ O‘zingiz uchun mashq qilib ko‘ring.
 Fikr va takliflaringizni qoldirishingiz mumkin.
 
 ✍️ Kurs muallifi: Bobur Meliev
+Batafsil: https://sifat.pro
 📂 Ushbu repo: mening shaxsiy uyga vazifalarim to‘plami.
